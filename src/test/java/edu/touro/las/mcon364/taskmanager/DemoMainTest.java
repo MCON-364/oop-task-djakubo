@@ -49,13 +49,14 @@ class DemoMainTest {
         assertEquals(5, testRegistry.getAll().size(), "Should have 5 tasks");
 
         // Verify specific tasks exist with correct priorities
-        Task doc = testRegistry.get("Write documentation");
-        assertNotNull(doc, "Write documentation task should exist");
-        assertEquals(Priority.HIGH, doc.priority(), "Write documentation should be HIGH priority");
+        var docOpt = testRegistry.get("Write documentation");
 
-        Task review = testRegistry.get("Review pull requests");
+        assertTrue(docOpt.isPresent(), "Write documentation task should exist");
+        assertEquals(Priority.HIGH, docOpt.get().priority(), "Write documentation should be HIGH priority");
+
+        var review = testRegistry.get("Review pull requests");
         assertNotNull(review, "Review pull requests task should exist");
-        assertEquals(Priority.MEDIUM, review.priority(), "Review pull requests should be MEDIUM priority");
+        assertEquals(Priority.MEDIUM, review.get().priority(), "Review pull requests should be MEDIUM priority");
 
         Task dependencies = testRegistry.get("Update dependencies");
         assertNotNull(dependencies, "Update dependencies task should exist");

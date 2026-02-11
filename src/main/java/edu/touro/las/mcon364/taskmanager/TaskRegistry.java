@@ -11,9 +11,9 @@ public class TaskRegistry {
         tasks.put(task.name(), task);
     }
 
-    public Task get(String name) {
-        return Optional.ofNullable(tasks.get(name))
-                .orElseThrow(() -> new TaskNotFoundException(name));
+    public Optional<Task> get(String name) {
+        return Optional.ofNullable(Optional.ofNullable(tasks.get(name))
+                .orElseThrow(() -> new TaskNotFoundException(name)));
     }
 
     public void remove(String name) {

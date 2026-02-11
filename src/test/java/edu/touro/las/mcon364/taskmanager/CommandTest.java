@@ -50,15 +50,16 @@ class CommandTest {
 
         Command command = new RemoveTaskCommand(registry, "To be removed");
         command.execute();
-
-        assertNull(registry.get("To be removed"), "Task should be removed from registry");
+        assertTrue(registry.get("To be removed").isEmpty(), "Task should be removed from registry");
     }
 
     @Test
     @DisplayName("RemoveTaskCommand on non-existent task should not throw")
     void testRemoveTaskCommandNonExistent() {
         Command command = new RemoveTaskCommand(registry, "Non-existent");
-        assertThrows(TaskNotFoundException.class, command::execute);
+
+        assertDoesNotThrow(command::execute,
+                "Removing non-existent task should not throw exception");
     }
 
     @Test

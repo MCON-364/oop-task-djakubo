@@ -16,12 +16,12 @@ public final class UpdateTaskCommand implements Command {
     public void execute() {
         // NOTE: This demonstrates old-style null checking
         // Students should refactor to use Optional and custom exceptions
-        Task existing = Optional.ofNullable(registry.get(taskName))
+        var existing = Optional.ofNullable(registry.get(taskName))
                 .orElseThrow(() -> new TaskNotFoundException
                         ("Task '" + taskName + "' not found"));
 
         // Create a new task with updated priority (tasks are immutable)
-        Task updated = new Task(existing.name(), newPriority);
+        Task updated = new Task(existing.get().name(), newPriority);
         registry.add(updated);  // This replaces the old task
     }
 }
