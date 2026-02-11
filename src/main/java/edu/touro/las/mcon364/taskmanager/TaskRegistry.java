@@ -2,16 +2,18 @@ package edu.touro.las.mcon364.taskmanager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class TaskRegistry {
     private final Map<String, Task> tasks = new HashMap<>();
 
     public void add(Task task) {
-        tasks.put(task.getName(), task);
+        tasks.put(task.name(), task);
     }
 
     public Task get(String name) {
-        return tasks.get(name);
+        return Optional.ofNullable(tasks.get(name))
+                .orElseThrow(() -> new TaskNotFoundException(name));
     }
 
     public void remove(String name) {
