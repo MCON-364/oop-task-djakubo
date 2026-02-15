@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -23,9 +25,9 @@ class TaskRegistryTest {
         Task task = new Task("Test task", Priority.HIGH);
         registry.add(task);
 
-        Task retrieved = registry.get("Test task");
+        var retrieved = registry.get("Test task");
         assertNotNull(retrieved, "Added task should be retrievable");
-        assertEquals(task, retrieved, "Retrieved task should equal added task");
+        assertEquals(task, retrieved.get(), "Retrieved task should equal added task");
     }
 
     @Test
@@ -37,15 +39,14 @@ class TaskRegistryTest {
         registry.add(task1);
         registry.add(task2);
 
-        Task retrieved = registry.get("Test task");
-        assertEquals(Priority.HIGH, retrieved.priority(), "Second task should replace first");
+        var retrieved = registry.get("Test task");
+        assertEquals(Priority.HIGH, retrieved.get().priority(), "Second task should replace first");
     }
 
     @Test
     @DisplayName("Getting non-existent task should return null")
     void testGetNonExistent() {
-        Task result = registry.get("Non-existent");
-        assertNull(result, "Non-existent task should return null (before Optional refactoring)");
+        assertThrows(TaskNotFoundException.class, () -> registry.get("non-existent"));
     }
 
     @Test
@@ -55,8 +56,8 @@ class TaskRegistryTest {
         registry.add(task);
 
         registry.remove("Test task");
+        assertThrows(TaskNotFoundException.class, () -> registry.get("Test task"));
 
-        assertNull(registry.get("Test task"), "Removed task should not be retrievable");
     }
 
     @Test
