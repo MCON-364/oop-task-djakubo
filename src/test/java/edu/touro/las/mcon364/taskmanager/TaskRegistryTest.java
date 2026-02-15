@@ -89,5 +89,6 @@ class TaskRegistryTest {
     void testGetAllEmpty() {
         assertTrue(registry.getAll().isEmpty(), "Empty registry should return empty map");
     }
+
 }
 

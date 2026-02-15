@@ -1,6 +1,7 @@
 package edu.touro.las.mcon364.taskmanager;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,4 +24,8 @@ public class TaskRegistry {
     public Map<String, Task> getAll() {
         return tasks;
     }
+
+    //public Map<Priority, List<Task>> getTasksByPriority(){
+
+    //}
 }

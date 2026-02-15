@@ -118,5 +118,39 @@ class CommandTest {
         assertEquals(Priority.HIGH, registry.get("Urgent").get().priority(),
                 "Should allow increasing priority");
     }
+
+    //AI generated tests I added for Update Task Priority
+    @Test
+    void testUpdateTaskPriority_success() {
+        TaskRegistry registry = new TaskRegistry();
+        Task original = new Task("Task1", Priority.LOW);
+        registry.add(original);
+
+        Command command = new UpdateTaskPriority(registry, "Task1", Priority.HIGH);
+        command.execute();
+
+        Task updated = registry.get("Task1").orElseThrow();
+
+        assertEquals(Priority.HIGH, updated.priority());
+    }
+    @Test
+    void testUpdateTaskPriority_taskNotFound() {
+        TaskRegistry registry = new TaskRegistry();
+
+        Command command = new UpdateTaskPriority(registry, "MissingTask", Priority.HIGH);
+
+        assertThrows(TaskNotFoundException.class, command::execute);
+    }
+    //Testing custom exception
+    @Test
+    void testUpdateTaskPriority_nullPriorityThrowsException() {
+        TaskRegistry registry = new TaskRegistry();
+        registry.add(new Task("Task1", Priority.LOW));
+
+        assertThrows(InvalidPriorityException.class,() -> new UpdateTaskPriority(registry, "Task1", null));
+    }
+
+
+
 }
 
