@@ -4,6 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -23,9 +27,9 @@ class TaskRegistryTest {
         Task task = new Task("Test task", Priority.HIGH);
         registry.add(task);
 
-        Task retrieved = registry.get("Test task");
+        var retrieved = registry.get("Test task");
         assertNotNull(retrieved, "Added task should be retrievable");
-        assertEquals(task, retrieved, "Retrieved task should equal added task");
+        assertEquals(task, retrieved.get(), "Retrieved task should equal added task");
     }
 
     @Test
@@ -37,15 +41,14 @@ class TaskRegistryTest {
         registry.add(task1);
         registry.add(task2);
 
-        Task retrieved = registry.get("Test task");
-        assertEquals(Priority.HIGH, retrieved.getPriority(), "Second task should replace first");
+        var retrieved = registry.get("Test task");
+        assertEquals(Priority.HIGH, retrieved.get().priority(), "Second task should replace first");
     }
 
     @Test
     @DisplayName("Getting non-existent task should return null")
     void testGetNonExistent() {
-        Task result = registry.get("Non-existent");
-        assertNull(result, "Non-existent task should return null (before Optional refactoring)");
+        assertThrows(TaskNotFoundException.class, () -> registry.get("non-existent"));
     }
 
     @Test
@@ -55,8 +58,8 @@ class TaskRegistryTest {
         registry.add(task);
 
         registry.remove("Test task");
+        assertThrows(TaskNotFoundException.class, () -> registry.get("Test task"));
 
-        assertNull(registry.get("Test task"), "Removed task should not be retrievable");
     }
 
     @Test
@@ -88,5 +91,36 @@ class TaskRegistryTest {
     void testGetAllEmpty() {
         assertTrue(registry.getAll().isEmpty(), "Empty registry should return empty map");
     }
+
+    //AI generated Unit tests for getTasksByPriority
+    @Test
+    void getTasksByPriority_groupsTasksCorrectly() {
+        TaskRegistry registry = new TaskRegistry();
+
+        Task t1 = new Task("Task1", Priority.HIGH);
+        Task t2 = new Task("Task2", Priority.LOW);
+        Task t3 = new Task("Task3", Priority.HIGH);
+
+        registry.add(t1);
+        registry.add(t2);
+        registry.add(t3);
+
+        Map<Priority, List<Task>> result = registry.getTasksByPriority();
+
+        assertEquals(2, result.get(Priority.HIGH).size());
+        assertEquals(1, result.get(Priority.LOW).size());
+    }
+
+    @Test
+    void getTasksByPriority_returnsEmptyMapWhenNoTasks() {
+        TaskRegistry registry = new TaskRegistry();
+
+        Map<Priority, List<Task>> result = registry.getTasksByPriority();
+
+        assertTrue(result.isEmpty());
+    }
+
+
+
 }
 
