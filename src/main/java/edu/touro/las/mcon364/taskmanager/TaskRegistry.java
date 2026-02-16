@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TaskRegistry {
     private final Map<String, Task> tasks = new HashMap<>();
@@ -25,7 +26,9 @@ public class TaskRegistry {
         return tasks;
     }
 
-    //public Map<Priority, List<Task>> getTasksByPriority(){
+    public Map<Priority, List<Task>> getTasksByPriority(){
 
-    //}
+        return getAll().values().stream().collect(Collectors.groupingBy(
+                Task::priority));
+    }
 }

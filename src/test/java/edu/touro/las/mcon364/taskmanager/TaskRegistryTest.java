@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,6 +91,36 @@ class TaskRegistryTest {
     void testGetAllEmpty() {
         assertTrue(registry.getAll().isEmpty(), "Empty registry should return empty map");
     }
+
+    //AI generated Unit tests for getTasksByPriority
+    @Test
+    void getTasksByPriority_groupsTasksCorrectly() {
+        TaskRegistry registry = new TaskRegistry();
+
+        Task t1 = new Task("Task1", Priority.HIGH);
+        Task t2 = new Task("Task2", Priority.LOW);
+        Task t3 = new Task("Task3", Priority.HIGH);
+
+        registry.add(t1);
+        registry.add(t2);
+        registry.add(t3);
+
+        Map<Priority, List<Task>> result = registry.getTasksByPriority();
+
+        assertEquals(2, result.get(Priority.HIGH).size());
+        assertEquals(1, result.get(Priority.LOW).size());
+    }
+
+    @Test
+    void getTasksByPriority_returnsEmptyMapWhenNoTasks() {
+        TaskRegistry registry = new TaskRegistry();
+
+        Map<Priority, List<Task>> result = registry.getTasksByPriority();
+
+        assertTrue(result.isEmpty());
+    }
+
+
 
 }
 
